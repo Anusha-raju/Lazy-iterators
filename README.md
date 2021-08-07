@@ -47,19 +47,18 @@ def type_cast_row(data_types: 'list', data_row:'iterable'):
 
 
 ```
-file = 'nyc_parking_tickets_extract.csv'
+files = 'nyc_parking_tickets_extract.csv'
 
-def read_cars(file):
+def read_cars(files):
     """
     This function takes a file as input and generates an generator object.
     this generator object returns a namedtuple
     """
-    with open(file) as files:
-        file_iter = iter(files)
-        headers = next(file_iter).strip('\n').split(',')
+    with open(files) as file:
+        headers = file.readline().strip('\n').split(',')
         header = [string.replace(" ","_") for string in headers]
         Car = namedtuple('Car', header)
-        for line in file_iter:
+        for line in file.readlines():
             data = line.strip('\n').split(',')
             data = type_cast_row(data_types, data)
             car = Car(*data)
@@ -75,7 +74,7 @@ def read_cars(file):
 A dictionary is used to store the number of violations made by each Vehicle_make
 
 ```
-gen = read_cars(file)
+gen = read_cars(files)
 def count_violations(generator):
     """
     this function returns a dictionary which contains the count of
